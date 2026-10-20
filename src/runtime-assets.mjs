@@ -12,9 +12,22 @@ export async function installNativeRuntime(destination, options = {}) {
  const temporary=await fs.mkdtemp(path.join(os.tmpdir(),'dsh-media-download-'));
  try{
   const archive=path.join(temporary,'runtime.tar.gz');
-  const response=await fetch(manifest.url,{signal:AbortSignal.timeout(600000)});
-  if(!response.ok)throw Error(`Runtime asset download failed: HTTP ${response.status}`);
-  await pipeline(Readable.fromWeb(response.body),createWriteStream(archive,{flags:'wx'}));
+  const combined=await fs.open(archive,'wx');
+  try{
+   const parts=manifest.parts||[{url:manifest.url}];
+   for(let i=0;i<parts.length;i++){
+    const part=parts[i],piece=path.join(temporary,'part-'+i);
+    const response=await fetch(part.url,{signal:AbortSignal.timeout(180000)});
+    if(!response.ok)throw Error(`Runtime asset download failed: HTTP ${response.status}`);
+    await pipeline(Readable.fromWeb(response.body),createWriteStream(piece,{flags:'wx'}));
+    const digest=createHash('sha256');let bytes=0;
+    for await(const chunk of createReadStream(piece)){digest.update(chunk);bytes+=chunk.length;}
+    const actual=digest.digest('hex');
+    if((part.sha256&&actual!==part.sha256)||(part.bytes!==undefined&&bytes!==part.bytes))throw Error('Native runtime part SHA256 mismatch');
+    for await(const chunk of createReadStream(piece))await combined.writeFile(chunk);
+    await fs.rm(piece);
+   }
+  }finally{await combined.close();}
   const hash=createHash('sha256');for await(const chunk of createReadStream(archive))hash.update(chunk);
   if(hash.digest('hex')!==manifest.sha256)throw Error('Native runtime SHA256 mismatch');
   const names=(await run('tar',['-tzf',archive])).trim().split('\n');

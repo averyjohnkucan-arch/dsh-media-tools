@@ -28,7 +28,7 @@ Select the model weights and Strata pack/tokenizer appropriate to a qualified te
 node src/cli.mjs setup-backends --backend-config /path/to/backend-models.json
 ```
 
-Setup downloads the package's versioned native executable bundle and verifies its pinned SHA256 before extraction. The worker code is shipped in the npm package. Model weights are separate assets: Omni Q4_K_M plus its BF16 projector alone total roughly 21 GB, and the native video model/pack can be much larger. Reusing weights avoids duplicating them or putting them into a tiny plugin tarball. Setup does not silently select a different model family or treat a model name as a compatibility guarantee.
+Setup downloads the package's versioned native executable bundle in small parts, verifies each part and the assembled archive with pinned SHA256 hashes, then extracts it. Shared-library symlinks are retained to avoid downloading duplicate library data. The worker code is shipped in the npm package. Model weights are separate assets: Omni Q4_K_M plus its BF16 projector alone total roughly 21 GB, and the native video model/pack can be much larger. Reusing weights avoids duplicating them or putting them into a tiny plugin tarball. Setup does not silently select a different model family or treat a model name as a compatibility guarantee.
 
 ## GPU ownership
 

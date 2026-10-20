@@ -2,11 +2,11 @@
 
 Linux qualification on 2026-10-20: Node 22.22.1, Python 3.12.14, npm-provided FFmpeg 7.0.2 and FFprobe N-66595-gc2b38619c0. DSH packages are unmodified registry releases at 0.2.1-rc.2 with Cordis 4.0.5.
 
-`npm test`: **20 passed, 0 failed**, including the optional real CPU Whisper fixture when `DSH_MEDIA_WHISPER_MODEL` names an existing faster-whisper-small model and `espeak-ng` is installed. Normal CI skips that optional ASR test without model assets.
+`npm test`: **22 passed, 0 failed**, including the optional real CPU Whisper fixture when `DSH_MEDIA_WHISPER_MODEL` names an existing faster-whisper-small model and `espeak-ng` is installed. Normal CI skips that optional ASR test without model assets.
 
 Verified:
 
-- Runtime asset download/extraction and rejection of a corrupt SHA256 were tested against a local fixture HTTP server.
+- Single-file and multipart runtime asset download/extraction, per-part integrity, and rejection of corrupt SHA256 checksums were tested against a local fixture HTTP server.
 - Real 440 Hz WAV analysis, frequency-bin oracle, non-clipping measurements and both PNG outputs.
 - Actual MP4 AAC decoding with nonzero seek, original timestamps and measured frequency.
 - Independent sample/duration check of a trimmed, -6 dB WAV edit.

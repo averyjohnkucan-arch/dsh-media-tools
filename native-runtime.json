@@ -1,8 +1,79 @@
 {
-  "version": "0.2.0",
+  "version": "0.2.2",
   "platform": "linux-x64-cuda13",
-  "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.0/dsh-media-native-linux-x64-cuda13-v0.2.0.tar.gz",
-  "sha256": "c20113f8534652aaf8935f0fdb92e0ab52fddeb64dca01fbf55ce78ef13c5099",
-  "bytes": 202254241,
-  "license": "MIT components; matching NVIDIA driver and CUDA runtime libraries installed separately"
+  "sha256": "06228ac009d55af1b8e7529f8b97bb11115e7fc53233c9affce640dd770180c6",
+  "bytes": 112162629,
+  "parts": [
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-001",
+      "sha256": "5306c2a24a2d067fbf52567a3528ccf149cb2ded08643a25634b300a7d150bab",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-002",
+      "sha256": "0628c86a57114ec0c04e6f88a5059bfca83da45a4ad905096001c61e28983e99",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-003",
+      "sha256": "9468fb1efa1d4d667dc98120613cbf923480e1b9185bcdda4ed9e169a209bad2",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-004",
+      "sha256": "8ec024819b16bd203bf734bdc17887fe642f89cc96ea6f235c2cc0c83674165a",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-005",
+      "sha256": "273c6a0a4ab027f61770d485ce2177e7eea97b088e1c8596061f11892d757d3c",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-006",
+      "sha256": "ed90706c6a8e926ef6f212cc4341c8ec14d1b9745d3e1bf5bb68f473198ba091",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-007",
+      "sha256": "4ca6d8bfb0e74a40b692eb93c64520d42ff0ff556da6e2c22177782e03a4579e",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-008",
+      "sha256": "948a72bcef285e42b2dd3eeca628cd388552b12c5ca77946d5cd3d54422839bb",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-009",
+      "sha256": "8280f5f2eaf6a4d37ef1dc4f777e69d5470265000be5289f8e6eb253a2f51ccd",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-010",
+      "sha256": "fd425d61530d7ca1b6d53107e1ebe68818190a5c8f3a1b7d873f63a3e40bafd4",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-011",
+      "sha256": "57371f4264c78b7cc21b84d9f091de845ee2b38bc089ff679e177e23b3297945",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-012",
+      "sha256": "a8509017f128b168cdc84aa7713ff299c1f7fac68b6490562efe12c40ef0240f",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-013",
+      "sha256": "8b36e4197b8e3ad0a33483d4d283ac24ad08be0d0e3cc61072fc50443072e27b",
+      "bytes": 8388608
+    },
+    {
+      "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.2/dsh-media-native-linux-x64-cuda13-v0.2.2.tar.gz.part-014",
+      "sha256": "c4dc52f0b90bd52ee510b6ee87c4e009dac0e34a450c70f5e3de9d95eae3df31",
+      "bytes": 3110725
+    }
+  ],
+  "license": "MIT components; matching NVIDIA driver and separately installed CUDA runtime required"
 }

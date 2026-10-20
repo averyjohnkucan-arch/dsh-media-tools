@@ -13,7 +13,7 @@ if (!values.workspace) throw Error('MCP requires --workspace <authorized folder>
 const workspace = await fs.realpath(values.workspace);
 const shutdown = new AbortController();
 const sessionId = 'mcp-' + randomUUID();
-const server = new Server({name:'dsh-media-tools',version:'0.2.1'},{capabilities:{tools:{}}});
+const server = new Server({name:'dsh-media-tools',version:'0.2.2'},{capabilities:{tools:{}}});
 server.setRequestHandler(ListToolsRequestSchema, async() => ({tools:definitions.map(d => ({name:d.name,description:d.description,inputSchema:{type:'object',properties:Object.fromEntries(Object.entries(d.parameters).filter(([k]) => k !== 'attachment_id').map(([k,{required,...v}]) => [k,v])),required:['source_path',...Object.entries(d.parameters).filter(([,v]) => v.required).map(([k]) => k)],additionalProperties:false}}))}));
 server.setRequestHandler(CallToolRequestSchema, async(request, extra) => {
   try {
