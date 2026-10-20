@@ -1,0 +1,17 @@
+{
+  "source": "Local AI version 2",
+  "files": [
+    {
+      "path": "analyze.py",
+      "sha256": "7f6b8162d536483de17e0b53ce988f38a395eec4285fb77706d3effecd0b5de8"
+    },
+    {
+      "path": "audio_source.py",
+      "sha256": "219cba03d2d1acb416875b83a8a4b8c1ea333c437e94c58b9529375c1ae2a182"
+    }
+  ],
+  "adaptations": [
+    "Explicit workspace and FFmpeg configuration; no production absolute paths or vendored Python environment."
+  ],
+  "dsh": "0.2.1-rc.2"
+}

@@ -1,0 +1,67 @@
+{
+  "name": "dsh-media-tools",
+  "version": "0.1.0",
+  "description": "Portable audio and native temporal video tools, Cordis plugins, agent skills, CLI and MCP server",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "bin": {
+    "dsh-media": "src/cli.mjs",
+    "dsh-media-mcp": "src/mcp.mjs"
+  },
+  "exports": {
+    ".": "./src/index.mjs",
+    "./audio": "./src/audio-plugin.mjs",
+    "./video": "./src/video-plugin.mjs"
+  },
+  "files": [
+    "src",
+    "python",
+    "skills",
+    "docs",
+    "cordis.patch.yml",
+    "audio.patch.yml",
+    "video.patch.yml",
+    "requirements.txt",
+    "README.md",
+    "LICENSE",
+    "provenance.json",
+    "npm-shrinkwrap.json",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "skills:install": "node src/install.mjs",
+    "doctor": "node src/cli.mjs doctor"
+  },
+  "dependencies": {
+    "@ffprobe-installer/ffprobe": "2.1.2",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "ffmpeg-static": "5.3.0",
+    "zod": "3.25.76"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "~4.0.5",
+    "@deepseek-ai/dsh-tools": "0.2.1-rc.2"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    },
+    "@deepseek-ai/cordis": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.5",
+    "@deepseek-ai/dsh-system-prompt": "0.2.1-rc.2",
+    "@deepseek-ai/dsh-tools": "0.2.1-rc.2"
+  }
+}

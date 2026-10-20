@@ -1,0 +1,5 @@
+- insert:
+    - id: dsh-media-audio
+      name: dsh-media-tools/audio
+    - id: dsh-media-video
+      name: dsh-media-tools/video
