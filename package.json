@@ -1,6 +1,6 @@
 {
   "name": "dsh-media-tools",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Portable audio and native temporal video tools, Cordis plugins, agent skills, CLI and MCP server",
   "type": "module",
   "license": "MIT",
@@ -29,7 +29,9 @@
     "LICENSE",
     "provenance.json",
     "npm-shrinkwrap.json",
-    "THIRD_PARTY_NOTICES.md"
+    "THIRD_PARTY_NOTICES.md",
+    "requirements-cuda.txt",
+    "native-runtime.json"
   ],
   "dsh": {
     "bundle": {

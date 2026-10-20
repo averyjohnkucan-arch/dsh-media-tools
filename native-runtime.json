@@ -1,0 +1,8 @@
+{
+  "version": "0.2.0",
+  "platform": "linux-x64-cuda13",
+  "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/releases/download/v0.2.0/dsh-media-native-linux-x64-cuda13-v0.2.0.tar.gz",
+  "sha256": "c20113f8534652aaf8935f0fdb92e0ab52fddeb64dca01fbf55ce78ef13c5099",
+  "bytes": 202254241,
+  "license": "MIT components; matching NVIDIA driver and CUDA runtime libraries installed separately"
+}

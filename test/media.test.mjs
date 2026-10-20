@@ -6,7 +6,7 @@ import path from 'node:path';
 import {execute} from '../src/core.mjs';
 import {run} from '../src/process.mjs';
 import {loadConfig} from '../src/config.mjs';
-const cfg = await loadConfig({python:process.env.DSH_MEDIA_PYTHON || 'python3'});
+const cfg = await loadConfig({python:process.env.DSH_MEDIA_PYTHON || 'python3',backend:undefined,localAIV2Root:undefined});
 const workspace = await fs.mkdtemp(path.join(os.tmpdir(),'dsh-media-test-'));
 const options = {workspace,config:cfg};
 test.after(async() => fs.rm(workspace,{recursive:true,force:true}));

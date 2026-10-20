@@ -12,7 +12,7 @@ node <this-skill-directory>/scripts/media.mjs doctor
 node <this-skill-directory>/scripts/media.mjs analyze_audio --workspace /absolute/workspace --args '{"source_path":"recording.wav","duration_seconds":30}'
 ```
 
-The helper supports `listen_audio`, `transcribe_audio`, `analyze_audio`, `edit_audio`, and `convert_audio`. CLI/MCP source paths must be workspace-relative; DSH also accepts an attachment ID or the latest single upload. `doctor` identifies missing runtimes/backends. If listening or transcription is unconfigured, report the missing backend rather than inventing media evidence.
+The helper supports `listen_audio`, `transcribe_audio`, `analyze_audio`, `edit_audio`, and `convert_audio`. CLI/MCP source paths must be workspace-relative; DSH also accepts an attachment ID or the latest single upload. `doctor` identifies missing runtimes/backends. The package includes on-demand Omni workers and runtime setup; no old V2 application is required after provisioning. If listening or transcription is unconfigured, run setup-backends with selected existing models or report the missing assets rather than inventing evidence.
 
 Numerical analysis accepts `start_seconds`, `duration_seconds` (at most 120), `channel` (zero-based), and `fft_size` (256–8192, powers of two). Split longer recordings into explicit time segments. Levels are dBFS, not calibrated SPL. State FFT frequency resolution when precision matters. Silence has no dominant frequency. Compare model sound descriptions against measurements when they conflict; Omni captions can hallucinate.
 

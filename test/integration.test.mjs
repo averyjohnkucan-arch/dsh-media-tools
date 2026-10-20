@@ -15,7 +15,7 @@ import {loadConfig} from '../src/config.mjs';
 import {Client} from '@modelcontextprotocol/sdk/client/index.js';
 import {StdioClientTransport} from '@modelcontextprotocol/sdk/client/stdio.js';
 const root=fileURLToPath(new URL('..',import.meta.url));
-const cfg=await loadConfig({python:process.env.DSH_MEDIA_PYTHON||'python3'});
+const cfg=await loadConfig({python:process.env.DSH_MEDIA_PYTHON||'python3',backend:undefined,localAIV2Root:undefined});
 const workspace=await fs.mkdtemp(path.join(os.tmpdir(),'dsh-media-integration-'));
 test.after(async()=>fs.rm(workspace,{recursive:true,force:true}));
 await run(cfg.ffmpeg,['-v','error','-f','lavfi','-i','sine=frequency=440:duration=1',path.join(workspace,'tone.wav')]);

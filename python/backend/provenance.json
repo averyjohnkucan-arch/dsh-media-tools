@@ -1,0 +1,144 @@
+{
+  "upstream": "https://github.com/agentionai/Strata",
+  "strata_commit": "9ff02c9fa9c86a88088370925b3c9131cc5d6c26",
+  "files": [
+    {
+      "source": "upstream/strata-gyro/serve/__init__.py",
+      "file": "vendor/serve/__init__.py",
+      "sha256": "7195d862b09ee0c290b6c28d5c1b6e7c5819212328ecbea7cd1422b4a5d4a3d6",
+      "adapted_sha256": "7195d862b09ee0c290b6c28d5c1b6e7c5819212328ecbea7cd1422b4a5d4a3d6"
+    },
+    {
+      "source": "upstream/strata-gyro/serve/chat_template.jinja",
+      "file": "vendor/serve/chat_template.jinja",
+      "sha256": "12827f24b742ea4e80cdc12dbcf9622227056b9f797252a3149263d4f9aaadce",
+      "adapted_sha256": "12827f24b742ea4e80cdc12dbcf9622227056b9f797252a3149263d4f9aaadce"
+    },
+    {
+      "source": "upstream/strata-gyro/serve/frontend.py",
+      "file": "vendor/serve/frontend.py",
+      "sha256": "9521e7c036d3b32a453840c4ac72760f7385fabe52c092ce842068c7a3b45426",
+      "adapted_sha256": "9521e7c036d3b32a453840c4ac72760f7385fabe52c092ce842068c7a3b45426"
+    },
+    {
+      "source": "upstream/strata-gyro/serve/mcp.py",
+      "file": "vendor/serve/mcp.py",
+      "sha256": "659c8e3c7db7d51c939870f843b2350f3efcf2ce8f1ff4b4372db4631e39b77f",
+      "adapted_sha256": "659c8e3c7db7d51c939870f843b2350f3efcf2ce8f1ff4b4372db4631e39b77f"
+    },
+    {
+      "source": "upstream/strata-gyro/serve/mcp_fake_server.py",
+      "file": "vendor/serve/mcp_fake_server.py",
+      "sha256": "ecc6afa3b44461e120d6901822a1b0db96bddf59324fefe8faa8f2cad48b7157",
+      "adapted_sha256": "ecc6afa3b44461e120d6901822a1b0db96bddf59324fefe8faa8f2cad48b7157"
+    },
+    {
+      "source": "upstream/strata-gyro/serve/prometheus.py",
+      "file": "vendor/serve/prometheus.py",
+      "sha256": "3b46bdfab7b02c063a54a041b457d7f15fc0f25c51addc67d63a1c147f3fd6d0",
+      "adapted_sha256": "3b46bdfab7b02c063a54a041b457d7f15fc0f25c51addc67d63a1c147f3fd6d0"
+    },
+    {
+      "source": "upstream/strata-gyro/serve/responses.py",
+      "file": "vendor/serve/responses.py",
+      "sha256": "5215aafab91eea1b77b4c81a1405731cd175fcbdcc9b0e56aa64db701a7100f4",
+      "adapted_sha256": "5215aafab91eea1b77b4c81a1405731cd175fcbdcc9b0e56aa64db701a7100f4"
+    },
+    {
+      "source": "upstream/strata-gyro/serve/runconfig.py",
+      "file": "vendor/serve/runconfig.py",
+      "sha256": "08c5ee5af5b599d11c25778725613948b8f6b8b74432aa6b645845e6d145bf31",
+      "adapted_sha256": "08c5ee5af5b599d11c25778725613948b8f6b8b74432aa6b645845e6d145bf31"
+    },
+    {
+      "source": "upstream/strata-gyro/serve/server.py",
+      "file": "vendor/serve/server.py",
+      "sha256": "a4da5ca3bacf6b42f63ff0f75aff6dfff5a0f1e5e1a08f7952d06ae6d8b84c08",
+      "adapted_sha256": "a4da5ca3bacf6b42f63ff0f75aff6dfff5a0f1e5e1a08f7952d06ae6d8b84c08"
+    },
+    {
+      "source": "upstream/strata-gyro/serve/structured.py",
+      "file": "vendor/serve/structured.py",
+      "sha256": "cd92893b672c89c9126839729c4f0d5a787dfe81ea020005f7494c6f9fe904d3",
+      "adapted_sha256": "cd92893b672c89c9126839729c4f0d5a787dfe81ea020005f7494c6f9fe904d3"
+    },
+    {
+      "source": "upstream/strata-gyro/serve/telemetry.py",
+      "file": "vendor/serve/telemetry.py",
+      "sha256": "633800881ebdd3fdbb2c377df9e5403e40ad80e16e05945007045016c068281c",
+      "adapted_sha256": "633800881ebdd3fdbb2c377df9e5403e40ad80e16e05945007045016c068281c"
+    },
+    {
+      "source": "upstream/strata-gyro/serve/winjob.py",
+      "file": "vendor/serve/winjob.py",
+      "sha256": "8fff65cf850e108b84ab06c3fb44a68b947b0f4834ce5880139ada5dfb11a749",
+      "adapted_sha256": "8fff65cf850e108b84ab06c3fb44a68b947b0f4834ce5880139ada5dfb11a749"
+    },
+    {
+      "source": "upstream/strata-gyro/tools/strata_tokenizer.py",
+      "file": "vendor/tools/strata_tokenizer.py",
+      "sha256": "1b64f5c98d50aea8e92b61ed1c2346a8d2c10330701ab84b4fb55433f81b3f1f",
+      "adapted_sha256": "1b64f5c98d50aea8e92b61ed1c2346a8d2c10330701ab84b4fb55433f81b3f1f"
+    },
+    {
+      "source": "upstream/strata-gyro/LICENSE",
+      "file": "vendor/LICENSE.strata",
+      "sha256": "949b9b0aada7476006469e58ee4ffb0e0f68c2d9137e90a356757b61a09d37f0",
+      "adapted_sha256": "949b9b0aada7476006469e58ee4ffb0e0f68c2d9137e90a356757b61a09d37f0"
+    },
+    {
+      "source": "services/audio-caption/caption_worker.py",
+      "file": "audio/caption_worker.py",
+      "sha256": "241714e97a1a2f1cc14043f71f38e95fcb8204a43a4b79bc4cf6d8a699474a84",
+      "adapted_sha256": "caf26c3ed38b74b0087ab89e1119bb63a479664d470137ace78ef98da4e8bf3f"
+    },
+    {
+      "source": "services/audio-caption/omni.py",
+      "file": "audio/omni.py",
+      "sha256": "488e9790d359851c4ffce4afa340519640620331d4d5990ffdfd923bbc58df5d",
+      "adapted_sha256": "32cb7a67ef6c03e9b106a9bcc30b5f8a310d9f8c1da81eb5486a9f2f5c6d5d1b"
+    },
+    {
+      "source": "services/audio-caption/preprocess.py",
+      "file": "audio/preprocess.py",
+      "sha256": "dd873d7f8a3d51b6db85c06a9d3d953227b3c7f4fbd9a670eb6c864f30aa7a93",
+      "adapted_sha256": "a1042dec5461e1498aa1e21fb10884810d2972dda64d7e18af2cc7e262556195"
+    },
+    {
+      "source": "services/native-video/job.py",
+      "file": "native/job.py",
+      "sha256": "c508d3ade10c9217b98df7a028dbc35211ef2af54180517a77545d2b797a8e87",
+      "adapted_sha256": "f25a943241c5672b440eaee1f184c0d54c3d799af79f321526e2f082bb4a1471"
+    },
+    {
+      "source": "services/native-video/video_media.py",
+      "file": "native/video_media.py",
+      "sha256": "62f621f9f660e9c29a596552d365897142a4eb9ca70fa71692ac6ff35b297073",
+      "adapted_sha256": "40a990c2e54f9298209b8f4a53a5d1feeecccbd20ccd1ac5e2d541b9edc030a3"
+    },
+    {
+      "source": "services/native-video/video_backend.py",
+      "file": "native/video_backend.py",
+      "sha256": "3526bc2007e7a8712831ad50bbef1ff7348c5b8d28b0b42757c363cbdfc3ff85",
+      "adapted_sha256": "3526bc2007e7a8712831ad50bbef1ff7348c5b8d28b0b42757c363cbdfc3ff85"
+    },
+    {
+      "source": "services/native-video/video_audio.py",
+      "file": "native/video_audio.py",
+      "sha256": "9898f696aabc66dab6e6e01b115fe5d46182d195493358e4cd47504dc3440130",
+      "adapted_sha256": "326c453b08bca28669847b068a43aad0fe160e619ba7ac6695e376a5ef821a90"
+    },
+    {
+      "source": "services/native-video/audio_worker.py",
+      "file": "native/audio_worker.py",
+      "sha256": "90987543ae1d69bd2f2acce207fe971db570cb8695a88d43ade3f9e256bc7810",
+      "adapted_sha256": "0aea4d971723cf2937fa2ffa22fdb787b460e9572da8dd0a4af376c97e778306"
+    },
+    {
+      "source": "services/native-video/audio_captioner.py",
+      "file": "native/audio_captioner.py",
+      "sha256": "0f6ccd3ded375f3806b495ffa05685a38662361ee346ebc6a7336c5ee9ed6b9e",
+      "adapted_sha256": "9f4180feca0f12f31691fc833c9a9881153382a2cb3f43dbec292ecfd887d537"
+    }
+  ]
+}

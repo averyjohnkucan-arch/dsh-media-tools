@@ -1,4 +1,6 @@
 import fs from 'node:fs/promises';
+import {withMediaLease} from './scheduler.mjs';
+import {loadConfig} from './config.mjs';
 import path from 'node:path';
 import {defineTool} from '@deepseek-ai/dsh-tools';
 import {execute} from './core.mjs';
@@ -25,7 +27,7 @@ export function installPlugin(ctx, kind, config = {}) {
       async execute(args, exec) {
         if (!exec.agent) throw Error('An active conversation is required');
         if (args.source_path && args.attachment_id) throw Error('Choose source_path or attachment_id');
-        const signal = exec.signal ? AbortSignal.any([exec.signal,shutdown.signal]) : shutdown.signal;
+        let signal = exec.signal ? AbortSignal.any([exec.signal,shutdown.signal]) : shutdown.signal;
         const workspace = await fs.realpath(exec.agent.session.header.cwd);
         let staging;
         try {
@@ -43,10 +45,14 @@ export function installPlugin(ctx, kind, config = {}) {
             }} finally { await file.close(); }
             input.source_path = path.relative(workspace, source);
           }
-          const pending = execute(definition.name, input, {workspace,sessionId:String(exec.agent.session.id),signal,config});
+          const resolved=await loadConfig(config);
+          const scheduler=ctx.get('modelScheduler');
+          const gpuOperation=['listen_audio','analyze_video'].includes(definition.name)&&resolved.backend;
+          const pending=withMediaLease(scheduler,gpuOperation?resolved.backend:null,signal,
+            ownedSignal=>execute(definition.name,input,{workspace,sessionId:String(exec.agent.session.id),signal:ownedSignal,config}));
           active.add(pending);
           let reply;
-          try { reply = await pending; } finally { active.delete(pending); }
+          try { reply=await pending; } finally { active.delete(pending); }
           const images = [], files = [];
           for (const artifact of reply.artifacts) {
             signal.throwIfAborted();

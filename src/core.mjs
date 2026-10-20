@@ -5,6 +5,7 @@ import {loadConfig} from './config.mjs';
 import {run} from './process.mjs';
 import {sourceFile, safeDirectory} from './files.mjs';
 import {commandBackend} from './adapters/command.mjs';
+import {bundledBackend} from './adapters/bundled.mjs';
 import {localV2} from './adapters/local-v2.mjs';
 const python = file => fileURLToPath(new URL('../python/' + file, import.meta.url));
 export const operations = ['analyze_audio', 'edit_audio', 'transcribe_audio', 'listen_audio', 'probe_video', 'analyze_video', 'convert_audio', 'convert_video'];
@@ -67,7 +68,7 @@ export async function execute(operation, args, {workspace, sessionId = 'cli', si
     } else {
       if (operation === 'analyze_video' && (typeof args.question !== 'string' || !args.question.trim() || args.question.length > 12000)) throw Error('Provide a video question of at most 12000 characters');
       const request = {schema: 1, operation, source, workspace, output, sessionId, question: args.question};
-      result = config.localAIV2Root ? await localV2(request, config, signal) : await commandBackend(request, config, signal);
+      result = config.backend ? await bundledBackend(request, config, signal) : config.localAIV2Root ? await localV2(request, config, signal) : await commandBackend(request, config, signal);
     }
     signal?.throwIfAborted();
     await fs.writeFile(path.join(output, 'result.json'), JSON.stringify(result, null, 2) + '\n', {flag: 'wx'});
@@ -89,7 +90,11 @@ export async function doctor(overrides) {
     catch(e) { checks.whisper = {ok:false,error:e.message}; }
   } else checks.whisper = {ok:false,error:'Set whisperModel to a local faster-whisper model directory, or configure a transcription backend'};
   let local;
-  if (config.localAIV2Root) {
+  if(config.backend){
+    try { for(const key of ['llama_server','omni_model','omni_projector','whisper_model'])await fs.access(config.backend[key]); await fs.access(config.backend.native.engine); await fs.access(config.backend.native.encoder); local={configured:true,ok:true,mode:'bundled-on-demand',requiresV2Service:false,requires_live_qualification:true}; }
+    catch(e){local={configured:true,ok:false,mode:'bundled-on-demand',error:e.message};}
+  }
+  if (!config.backend && config.localAIV2Root) {
     try {
       const router = JSON.parse(await fs.readFile(path.join(config.localAIV2Root,'config/router.json'),'utf8'));
       const response = await fetch(`http://127.0.0.1:${router.port}/health`, {signal:AbortSignal.timeout(3000)});

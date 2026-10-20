@@ -1,58 +1,63 @@
 # dsh-media-tools
 
-Two DSH/Cordis plugins in one repository, plus agent skills, a CLI and a stdio MCP server. Adapted from the configured audio/video integrations in Local AI v2.
+Two independent DSH/Cordis plugins, agent skills, a CLI and a stdio MCP server, with included on-demand Omni listening and native temporal video backends. The old Local AI v2 application does not need to run.
 
-| Plugin | Tools |
+| Plugin | Selectable tools |
 | --- | --- |
 | Audio | `analyze_audio`, `edit_audio`, `convert_audio`, `transcribe_audio`, `listen_audio` |
 | Video | `probe_video`, `convert_video`, `analyze_video` |
 
-Audio analysis produces waveform, FFT, spectrogram and waterfall PNGs, numerical spectrum data and digital-level measurements. DSH and MCP return the plot images inline. Edits create a new WAV. Local CPU Whisper produces timestamped speech; Local AI v2 supplies Omni sound descriptions and native temporal video with aligned speech/audio.
+Audio analysis returns inline waveform/FFT/spectrogram and waterfall plots, measured digital levels, and numerical spectrum data. Editing creates a new WAV. Conversion supports audio extraction plus WAV/FLAC/MP3/M4A/OGG and MP4/WebM/GIF. CPU Whisper supplies timestamped speech. Omni supplies fallible sound descriptions. Native video preserves temporal frames, aligned audio and engine evidence.
 
-## Install skills and runtime
-
-Requirements: Node 22.19+, Python 3.10–3.12 with venv/pip, FFmpeg and FFprobe binaries are installed automatically as npm dependencies for supported platforms. Explicit `ffmpeg` / `ffprobe` config paths override them. Python requirements are pinned for Python 3.12. Windows is a portability target; it has not been qualified. The optional Local AI v2 adapter is Linux-only.
+## Install
 
 ```bash
-git clone https://github.com/averyjohnkucan-arch/dsh-media-tools.git dsh-media-tools
+git clone https://github.com/averyjohnkucan-arch/dsh-media-tools.git
 cd dsh-media-tools
 npm ci
-node src/install.mjs --setup-python --python python3
+node src/install.mjs --setup-python \
+  --include-backends --local-ai '/path/to/Local AI version 2'
 ```
 
-This installs both skills into `~/.agents/skills`, copies the runtime into a versioned directory under `~/.local/share/dsh-media-tools`, and writes a per-user config at `~/.config/dsh-media/config.json`. Moving the checkout afterward does not break the installed skills. Existing unowned skills and locally edited installed skills are preserved; the installer stops before replacing them. Repeat the command to upgrade. Previous runtime directories remain for rollback; uninstall preserves them, configuration, models and generated files.
+This installs both skills into `~/.agents/skills`, copies the runtime into a versioned directory under `~/.local/share/dsh-media-tools`, and configures `~/.config/dsh-media/config.json`. It uses V2 **once as an import source**, copies native executables into its own cache, and reuses the model store. The old V2 application and inference companion can stay stopped. On Linux, an available standalone Python distribution is also imported into package-owned storage when no `--python` is specified. Moving the plugin checkout does not break the installed skills.
 
-For your existing Local AI v2 deployment, add:
+FFmpeg and FFprobe binaries install automatically through pinned npm dependencies. Python 3.12 with venv/pip and an NVIDIA driver are host prerequisites. Setup installs the CUDA user-space runtime libraries. The native executable bundle currently targets Linux x64/CUDA 13; Windows/macOS GPU execution is not qualified. CPU tools use the platform FFmpeg dependencies where available.
 
-```bash
-node src/install.mjs --setup-python --python python3 \
-  --local-ai /path/to/active/local-ai-v2 \
-  --whisper-model /path/to/faster-whisper-model
-```
+For a fresh machine with separately selected models, replace `--local-ai` with `--backend-config /path/to/backend-models.json`. Setup downloads and SHA256-verifies this repo's versioned native runtime asset. Model weights are large and remain separate: Omni plus its projector is about 21 GB; native video may need considerably more. See [standalone backend setup](docs/standalone-backends.md).
 
-The root must be the **active** V2 deployment, whose configured scheduler and runtime paths remain valid. A copied archive alone is not a running backend. The adapter retains V2's worker sandbox and scheduler; it does not boot another GPU model or modify/restart DSH. Full inference weights and native engine builds are external prerequisites.
+For CPU tools only, omit `--include-backends` and `--local-ai`; configure `--whisper-model /path/to/faster-whisper-model` for speech. Existing unowned or locally edited skills are preserved; upgrades stop before replacing them. Previous runtime releases remain for rollback. `node src/install.mjs --uninstall` removes only owned, unchanged skills and preserves models, config and workspace outputs.
 
-The installer prints the installed runtime path and MCP command. Run that runtime's `src/cli.mjs doctor` to inspect prerequisites. `doctor` reports configured inference backends separately from live qualification.
+## DSH
 
-## DSH plugins
-
-Target: stock DSH `0.2.1-rc.2` and Cordis `~4.0.5`. DSH is in developer preview; other versions require compatibility testing.
-
-Install the npm tarball using DSH's plugin manager, or run its plugin-add command from your chosen profile:
+Target: DSH `0.2.1-rc.2` and Cordis `~4.0.5`. Package and install from your chosen DSH profile:
 
 ```bash
 npm pack
-# In the DSH profile directory:
-dsh plugin --profile web add /absolute/path/dsh-media-tools-0.1.0.tgz
+dsh plugin --profile web add /absolute/path/dsh-media-tools-0.2.0.tgz
 ```
 
-The package's `dsh.bundle.patch` inserts two independent plugins. Each registers through `defineTool`, uses attachment services and system-prompt sections, and hooks Cordis disposal to cancel its own work. No host source patches are required. Disable `dsh-media-audio` or `dsh-media-video` independently through DSH's Cordis controls; scoped registrations/prompt sections disappear and in-flight owned calls are cancelled. Enabling restores the registrations. Disabling never removes outputs, models or config.
+The package inserts `dsh-media-audio` and `dsh-media-video` as independently switchable plugins. They use DSH tool registration, attachments, prompt sections and Cordis lifecycle cleanup; no host source patch is needed. Disabling either cancels its owned work and removes its registrations. It never deletes generated files or models. Individual inserts are also in `audio.patch.yml` and `video.patch.yml`.
 
-For manual profile composition, `audio.patch.yml` and `video.patch.yml` contain the individual inserts. Both read the shared per-user config or `DSH_MEDIA_CONFIG`; per-plugin `config` values override that file. Avoid registering the same tools through both the direct plugins and MCP in one DSH profile.
+Where installed, DSH's `modelScheduler` service handles GPU admission so managed models can unload before media inference and resume afterward. The workers also hold a package-owned lock and refuse to collide with an unrelated GPU owner. MCP clients cannot control another application's private scheduler: unload an unrelated resident model before standalone GPU inference.
 
-The install script installs agent skills; it does **not** edit a live DSH profile or reload DSH. Keep any active indexing jobs running while you choose a safe profile activation time.
+Do not register duplicate tool names through both the direct plugins and MCP in one DSH profile. The installer does not modify a live DSH profile or reload DSH.
 
-See [conversion recipes](docs/conversion.md) for extraction, transcoding and editing.
+## MCP
+
+The installer prints the runtime path. Add this server to your MCP client:
+
+```json
+{
+  "mcpServers": {
+    "dsh-media": {
+      "command": "node",
+      "args": ["/installed/runtime/src/mcp.mjs", "--workspace", "/authorized/workspace"]
+    }
+  }
+}
+```
+
+The official MCP SDK server exposes all eight tools and returns plot image blocks, saved files and report JSON. Select tools normally in your client. Audio playback uses returned WAV paths where the client supports it. Allow a long tool timeout for GPU jobs. For Codex, the setup syntax is documented in [official MCP configuration](https://learn.chatgpt.com/docs/extend/mcp).
 
 ## CLI
 
@@ -60,39 +65,20 @@ See [conversion recipes](docs/conversion.md) for extraction, transcoding and edi
 node src/cli.mjs doctor
 node src/cli.mjs analyze_audio --workspace /path/to/workspace \
   --args '{"source_path":"recording.mp3","duration_seconds":30,"fft_size":8192}'
-node src/cli.mjs edit_audio --workspace /path/to/workspace \
-  --args '{"source_path":"recording.mp3","start_seconds":2,"duration_seconds":10,"gain_db":-3,"fade_seconds":0.2}'
-node src/cli.mjs transcribe_audio --workspace /path/to/workspace \
-  --args '{"source_path":"speech.wav"}'
+node src/cli.mjs listen_audio --workspace /path/to/workspace \
+  --args '{"source_path":"recording.mp3"}'
 node src/cli.mjs analyze_video --workspace /path/to/workspace \
   --args '{"source_path":"clip.mp4","question":"Describe the events in timestamp order."}'
 ```
 
-CLI source paths must be relative to the explicitly authorized workspace. DSH additionally accepts the latest single media upload or an attachment ID. Outputs are unique directories under `<workspace>/.dsh-media`; original media is never overwritten. The path checks prevent accidental traversal/symlink escapes; the portable CPU runner is not an OS security sandbox. Local AI v2 retains its own sandbox.
+CLI/MCP paths are relative to the explicitly authorized workspace. DSH can use the latest single media upload or an attachment ID. Outputs are unique `.dsh-media` directories; originals stay unchanged. See [conversion recipes](docs/conversion.md).
 
-Audio numerical segments are at most 120 seconds and 25 million channel-samples. Input size is at most 2 GiB. CPU speech transcription is limited to the first two hours. Edits are bounded to two hours. Raw Whisper likelihoods are not calibrated correctness percentages. Numerical levels are dBFS, not calibrated SPL. Sound descriptions can hallucinate.
+**Model requirement:** `analyze_video` is specifically for models with native temporal video support and a compatible engine/projector. User deployment examples include Flash 3.8, Flash Next, Qwen 3.6 35B-A3B and Qwen 27B. These are deployment labels, not a tested compatibility matrix. Each model/engine/projector combination needs qualification. The bundled native path preserves 6 FPS, 15-second windows, 3-second overlap, SVE2 records and M-RoPE traces. It never replaces temporal video with independent still frames.
 
-## MCP
+Numerical audio segments are at most 120 seconds and 25 million channel-samples. Input size is at most 2 GiB. CPU transcription and conversions/edits are bounded to two hours; conversions default to the first 30 seconds. Numerical levels are dBFS, not calibrated SPL. Whisper likelihoods are not correctness percentages. Omni captions can hallucinate; compare descriptions with measured evidence.
 
-```json
-{
-  "mcpServers": {
-    "dsh-media": {
-      "command": "node",
-      "args": ["/absolute/installed/runtime/src/mcp.mjs", "--workspace", "/authorized/workspace"]
-    }
-  }
-}
-```
+## Development and provenance
 
-The server requires an explicit workspace, uses the official MCP SDK, and returns plot image blocks plus file paths and report JSON. The client renders audio playback from the returned WAV path where supported. It does not silently change any MCP client configuration.
+Run `npm ci && npm test` with the pinned Python requirements; `DSH_MEDIA_PYTHON` selects the interpreter. Optional live inference checks are separate from the normal CPU/MCP/Cordis suite. See [validation](docs/validation.md), [advanced backends](docs/backends.md), [source provenance](provenance.json) and [third-party notices](THIRD_PARTY_NOTICES.md).
 
-## Backends, tests and limitations
-
-See [backend configuration](docs/backends.md) and [validation](docs/validation.md). Run `npm ci && npm test` with the pinned Python packages installed; `DSH_MEDIA_PYTHON` selects the test interpreter.
-
-**Model requirement:** `analyze_video` is specifically for models with native temporal video support and a compatible temporal engine/projector. User deployment examples: Flash 3.8, Flash Next, Qwen 3.6 35B-A3B and Qwen 27B. These names are examples, not a tested compatibility matrix; validate each deployed model/engine/projector combination.
-
-Native video never falls back to independent still frames. The V2 adapter preserves its 6 FPS / 15-second / 3-second-overlap path and requires native temporal tokens plus M-RoPE evidence. A portable command adapter supports other deployments with the same evidence contract. The package is independently installable; native inference requires one of those configured backends.
-
-The local package does not include private settings, tokens, chat histories, recordings, models, or production runtime binaries. Source adaptation hashes are recorded in `provenance.json`. DSH/MCP and Python dependencies retain their respective licenses.
+The portable CPU runner enforces path checks, not an OS sandbox. The included Linux GPU backend runs owned processes with per-job scratch, bounded inputs and cancellation. Native executable assets and vendored Strata/llama components keep their licenses. Private settings, credentials, chat histories, recordings and model weights are not checked into this repository.

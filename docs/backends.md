@@ -1,5 +1,8 @@
 # Backend configuration
 
+The default in version 0.2 is the included on-demand backend, configured by `setup-backends`. Start with [standalone setup](standalone-backends.md). The old V2 HTTP adapter and external-command interface below remain optional compatibility modes; neither is required by the bundled backend. A saved `backend` object takes precedence over those adapters.
+
+
 Configuration is read from `~/.config/dsh-media/config.json`, or the file named by `DSH_MEDIA_CONFIG`. Per-plugin config overrides it. `DSH_MEDIA_PYTHON` selects the Python default; an explicit saved/per-plugin `python` value takes precedence.
 
 ```json

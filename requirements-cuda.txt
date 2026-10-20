@@ -1,0 +1,2 @@
+nvidia-cuda-runtime==13.1.80
+nvidia-cublas==13.2.1.1
