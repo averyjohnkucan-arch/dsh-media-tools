@@ -6,9 +6,9 @@ import {Readable} from 'node:stream';
 import {pipeline} from 'node:stream/promises';
 import {createWriteStream,createReadStream} from 'node:fs';
 import {run} from './process.mjs';
-export async function installNativeRuntime(destination) {
+export async function installNativeRuntime(destination, options = {}) {
  if(process.platform!=='linux'||process.arch!=='x64')throw Error('Published native runtime currently supports Linux x64 only; do not infer Windows/macOS compatibility.');
- const manifest=JSON.parse(await fs.readFile(new URL('../native-runtime.json',import.meta.url),'utf8'));
+ const manifest=options.manifest||JSON.parse(await fs.readFile(new URL('../native-runtime.json',import.meta.url),'utf8'));
  const temporary=await fs.mkdtemp(path.join(os.tmpdir(),'dsh-media-download-'));
  try{
   const archive=path.join(temporary,'runtime.tar.gz');

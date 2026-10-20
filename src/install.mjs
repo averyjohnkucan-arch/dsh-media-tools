@@ -6,6 +6,7 @@ import {fileURLToPath} from 'node:url';
 import {parseArgs} from 'node:util';
 import {createHash} from 'node:crypto';
 import {run} from './process.mjs';
+import {importPortablePython} from './python-runtime.mjs';
 import {configPath} from './config.mjs';
 const {values} = parseArgs({options:{help:{type:'boolean'},uninstall:{type:'boolean'},prefix:{type:'string'},'runtime-prefix':{type:'string'},'setup-python':{type:'boolean'},'include-backends':{type:'boolean'},'backend-config':{type:'string'},python:{type:'string'},'whisper-model':{type:'string'},'local-ai':{type:'string'},'skip-npm':{type:'boolean'}}});
 if (values.help) {
@@ -41,7 +42,7 @@ if (values.help) {
   console.log('Removed owned skills. Runtime releases, config, models and workspace outputs preserved.');
  } else {
   await fs.mkdir(runtimePrefix,{recursive:true});
-  const release = await fs.mkdtemp(path.join(runtimePrefix,'0.2.0-'));
+  const release = await fs.mkdtemp(path.join(runtimePrefix,'0.2.1-'));
   for (const name of ['src','python','skills','docs','package.json','package-lock.json','npm-shrinkwrap.json','requirements.txt','requirements-cuda.txt','native-runtime.json','cordis.patch.yml','audio.patch.yml','video.patch.yml','README.md','LICENSE','THIRD_PARTY_NOTICES.md','provenance.json']) {
    try { await fs.cp(path.join(source,name),path.join(release,name),{recursive:true}); }
    catch(e) { if (e.code !== 'ENOENT') throw e; }
@@ -56,8 +57,7 @@ if (values.help) {
     const portable=path.join(runtimePrefix,'python-standalone');
     try{
      await fs.access(path.join(imported,'bin','python3'));
-     try{await fs.access(path.join(portable,'bin','python3'));}catch(e){if(e.code!=='ENOENT')throw e;await fs.cp(imported,portable,{recursive:true});}
-     bootstrapPython=path.join(portable,'bin','python3');
+     bootstrapPython=await importPortablePython(imported,portable);
     }catch(e){if(e.code!=='ENOENT')throw e;}
    }
    await run(bootstrapPython,['-m','venv',path.join(release,'.venv')],{timeout:120000});
@@ -82,7 +82,7 @@ if (values.help) {
    // JSON-encoded import URL handles spaces and quotes; no shell command generation.
    const realURL = new URL('src/cli.mjs', (await import('node:url')).pathToFileURL(release + path.sep)).href;
    await fs.writeFile(path.join(temporary,'scripts','media.mjs'),`#!/usr/bin/env node\nimport ${JSON.stringify(realURL)};\n`);
-   await fs.writeFile(path.join(temporary,marker),JSON.stringify({package:'dsh-media-tools',version:'0.2.0',runtime:release,digest:await digest(temporary)},null,2));
+   await fs.writeFile(path.join(temporary,marker),JSON.stringify({package:'dsh-media-tools',version:'0.2.1',runtime:release,digest:await digest(temporary)},null,2));
    const backup = destination + '.previous-' + Date.now();
    const exists = await owned(destination);
    if (exists) await fs.rename(destination,backup);

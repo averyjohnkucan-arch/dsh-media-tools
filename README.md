@@ -33,7 +33,7 @@ Target: DSH `0.2.1-rc.2` and Cordis `~4.0.5`. Package and install from your chos
 
 ```bash
 npm pack
-dsh plugin --profile web add /absolute/path/dsh-media-tools-0.2.0.tgz
+dsh plugin --profile web add /absolute/path/dsh-media-tools-0.2.1.tgz
 ```
 
 The package inserts `dsh-media-audio` and `dsh-media-video` as independently switchable plugins. They use DSH tool registration, attachments, prompt sections and Cordis lifecycle cleanup; no host source patch is needed. Disabling either cancels its owned work and removes its registrations. It never deletes generated files or models. Individual inserts are also in `audio.patch.yml` and `video.patch.yml`.
