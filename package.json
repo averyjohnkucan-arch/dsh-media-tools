@@ -63,5 +63,13 @@
     "@deepseek-ai/cordis": "4.0.5",
     "@deepseek-ai/dsh-system-prompt": "0.2.1-rc.2",
     "@deepseek-ai/dsh-tools": "0.2.1-rc.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/averyjohnkucan-arch/dsh-media-tools.git"
+  },
+  "homepage": "https://github.com/averyjohnkucan-arch/dsh-media-tools#readme",
+  "bugs": {
+    "url": "https://github.com/averyjohnkucan-arch/dsh-media-tools/issues"
   }
 }

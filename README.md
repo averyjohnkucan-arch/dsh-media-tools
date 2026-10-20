@@ -14,7 +14,7 @@ Audio analysis produces waveform, FFT, spectrogram and waterfall PNGs, numerical
 Requirements: Node 22.19+, Python 3.10–3.12 with venv/pip, FFmpeg and FFprobe binaries are installed automatically as npm dependencies for supported platforms. Explicit `ffmpeg` / `ffprobe` config paths override them. Python requirements are pinned for Python 3.12. Windows is a portability target; it has not been qualified. The optional Local AI v2 adapter is Linux-only.
 
 ```bash
-git clone <this-repository-url> dsh-media-tools
+git clone https://github.com/averyjohnkucan-arch/dsh-media-tools.git dsh-media-tools
 cd dsh-media-tools
 npm ci
 node src/install.mjs --setup-python --python python3
