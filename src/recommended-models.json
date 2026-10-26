@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "models": [
+    {
+      "id": "omni-captioner",
+      "name": "Qwen3 Omni 30B A3B Captioner \u00b7 Q4_K_M",
+      "recommended": true,
+      "files": [
+        {
+          "repo": "presencesw/Qwen3-Omni-30B-A3B-Captioner-GGUF",
+          "revision": "99db9183f4063d8664eb2124f3a1a26590a4ac94",
+          "file": "Qwen3-Omni-30B-A3B-Captioner-Q4_K_M.gguf",
+          "sha256": "f6b443caefee34c82edc51278bbd410ad58146baf6fca53d09035322300034cf",
+          "size": 18557053312,
+          "name": "Qwen3-Omni-30B-A3B-Captioner-Q4_K_M.gguf",
+          "role": "omni_model",
+          "target": "Qwen3-Omni-30B-A3B-Captioner-Q4_K_M.gguf",
+          "downloadable": true,
+          "evidence": "Existing local download/hash receipt"
+        },
+        {
+          "repo": "presencesw/Qwen3-Omni-30B-A3B-Captioner-GGUF",
+          "revision": "99db9183f4063d8664eb2124f3a1a26590a4ac94",
+          "file": "mmproj-Qwen3-Omni-30B-A3B-Captioner-BF16.gguf",
+          "sha256": "81d4d92662eb7f387f09b0a6679e945bf61dd0f2ef5ab8d36be6cc9580bb6252",
+          "size": 2207465728,
+          "name": "mmproj-Qwen3-Omni-30B-A3B-Captioner-BF16.gguf",
+          "role": "omni_projector",
+          "target": "mmproj-Qwen3-Omni-30B-A3B-Captioner-BF16.gguf",
+          "downloadable": true,
+          "evidence": "Existing local download/hash receipt"
+        }
+      ],
+      "notes": "For fallible listening descriptions; configure standalone backends after download."
+    },
+    {
+      "id": "whisper-small",
+      "name": "Whisper Small \u00b7 CPU transcription",
+      "recommended": true,
+      "files": [
+        {
+          "name": "config.json",
+          "target": "config.json",
+          "role": "whisperModel",
+          "repo": "Systran/faster-whisper-small",
+          "revision": "536b0662742c02347bc0e980a01041f333bce120",
+          "file": "config.json",
+          "size": 2370,
+          "downloadable": true,
+          "gitBlob": "e5047537059bd8f182d9ca64c470201585015187"
+        },
+        {
+          "name": "model.bin",
+          "target": "model.bin",
+          "role": "whisperModel",
+          "repo": "Systran/faster-whisper-small",
+          "revision": "536b0662742c02347bc0e980a01041f333bce120",
+          "file": "model.bin",
+          "size": 483546902,
+          "downloadable": true,
+          "sha256": "3e305921506d8872816023e4c273e75d2419fb89b24da97b4fe7bce14170d671"
+        },
+        {
+          "name": "tokenizer.json",
+          "target": "tokenizer.json",
+          "role": "whisperModel",
+          "repo": "Systran/faster-whisper-small",
+          "revision": "536b0662742c02347bc0e980a01041f333bce120",
+          "file": "tokenizer.json",
+          "size": 2203239,
+          "downloadable": true,
+          "gitBlob": "7818adb6de9fa3064d3ff81226fdd675be1f6344"
+        },
+        {
+          "name": "vocabulary.txt",
+          "target": "vocabulary.txt",
+          "role": "whisperModel",
+          "repo": "Systran/faster-whisper-small",
+          "revision": "536b0662742c02347bc0e980a01041f333bce120",
+          "file": "vocabulary.txt",
+          "size": 459861,
+          "downloadable": true,
+          "gitBlob": "c9074644d9d1205686f16d411564729461324b75"
+        }
+      ],
+      "notes": "Download the complete pinned CTranslate2 snapshot, then set whisperModel to the resulting directory in backend configuration."
+    },
+    {
+      "id": "native-flash-video",
+      "name": "Qwen3.8 Flash Next \u00b7 Atomic Q5 native temporal video",
+      "recommended": true,
+      "files": [
+        {
+          "name": "Qwen3.8-Flash-Next-AD-5.00bpw-Q5_K_M-M64-00001-of-00033.gguf",
+          "target": "required-main-model.gguf",
+          "role": "nativeSource",
+          "downloadable": false,
+          "evidence": "Saved source path is missing; choose a complete supported model before native video analysis."
+        },
+        {
+          "repo": "AtomicChat/Qwen3.8-Flash-Next-GGUF",
+          "revision": "1c1f33abc8e835db3215390e8e14c6cc726f5843",
+          "file": "mmproj-Qwen3.8-Flash-Next-F16.gguf",
+          "sha256": "0e61454a76dd154a10aaa8fb1ada32615f55a13e4171014dacd06913e4aa6889",
+          "name": "mmproj-Qwen3.8-Flash-Next-F16.gguf",
+          "target": "mmproj-Qwen3.8-Flash-Next-F16.gguf",
+          "role": "nativeSource",
+          "size": 904003840,
+          "downloadable": true
+        }
+      ],
+      "notes": "The saved native-video configuration points to a missing main Atomic Q5 GGUF/runtime pack. Select a complete current native-video model in backend configuration. The projector alone is insufficient."
+    }
+  ]
+}

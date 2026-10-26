@@ -41,7 +41,8 @@
   "scripts": {
     "test": "node --test test/*.test.mjs",
     "skills:install": "node src/install.mjs",
-    "doctor": "node src/cli.mjs doctor"
+    "doctor": "node src/cli.mjs doctor",
+    "models": "node src/model-download.mjs"
   },
   "dependencies": {
     "@ffprobe-installer/ffprobe": "2.1.2",

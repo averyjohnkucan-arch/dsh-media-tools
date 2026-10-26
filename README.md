@@ -82,3 +82,7 @@ Numerical audio segments are at most 120 seconds and 25 million channel-samples.
 Run `npm ci && npm test` with the pinned Python requirements; `DSH_MEDIA_PYTHON` selects the interpreter. Optional live inference checks are separate from the normal CPU/MCP/Cordis suite. See [validation](docs/validation.md), [advanced backends](docs/backends.md), [source provenance](provenance.json) and [third-party notices](THIRD_PARTY_NOTICES.md).
 
 The portable CPU runner enforces path checks, not an OS sandbox. The included Linux GPU backend runs owned processes with per-job scratch, bounded inputs and cancellation. Native executable assets and vendored Strata/llama components keep their licenses. Private settings, credentials, chat histories, recordings and model weights are not checked into this repository.
+
+## Recommended models and exact identities
+
+Run `npm run models -- list` to inspect the configured Omni, Whisper and native-video model identities and exact hashes/revisions. To fetch a complete pinned set, run `npm run models -- download omni-captioner /absolute/model/storage` or use `whisper-small`. The command resumes partial files, verifies content, prints progress and writes `download-receipt.json`. Configure the resulting paths using the standalone backend setup instructions above. Model download does not launch inference or change private settings. Native video additionally requires a compatible complete checkpoint, projector and prepared runtime pack; a projector alone is insufficient.
