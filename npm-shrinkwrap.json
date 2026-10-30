@@ -1,12 +1,12 @@
 {
   "name": "dsh-media-tools",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "dsh-media-tools",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "license": "MIT",
       "dependencies": {
         "@ffprobe-installer/ffprobe": "2.1.2",
@@ -24,11 +24,12 @@
         "@deepseek-ai/dsh-tools": "0.2.1-rc.2"
       },
       "engines": {
-        "node": ">=22.19.0"
+        "node": ">=22.19.0",
+        "dsh": ">=0.2.1-rc.2 <0.3.0-0"
       },
       "peerDependencies": {
         "@deepseek-ai/cordis": "~4.0.5",
-        "@deepseek-ai/dsh-tools": "0.2.1-rc.2"
+        "@deepseek-ai/dsh-tools": ">=0.2.1-rc.2 <0.3.0-0"
       },
       "peerDependenciesMeta": {
         "@deepseek-ai/cordis": {
