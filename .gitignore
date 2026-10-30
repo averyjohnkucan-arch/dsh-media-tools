@@ -6,3 +6,7 @@ __pycache__/
 .dsh-media/
 config.local.json
 .env
+
+# DSH compatibility workflow scratch data
+.compat-home/
+.compat-packed/
