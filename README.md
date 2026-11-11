@@ -86,3 +86,5 @@ The portable CPU runner enforces path checks, not an OS sandbox. The included Li
 ## Recommended models and exact identities
 
 Run `npm run models -- list` to inspect the configured Omni, Whisper and native-video model identities and exact hashes/revisions. To fetch a complete pinned set, run `npm run models -- download omni-captioner /absolute/model/storage` or use `whisper-small`. The command resumes partial files, verifies content, prints progress and writes `download-receipt.json`. Configure the resulting paths using the standalone backend setup instructions above. Model download does not launch inference or change private settings. Native video additionally requires a compatible complete checkpoint, projector and prepared runtime pack; a projector alone is insufficient.
+
+See [COMPATIBILITY.md](COMPATIBILITY.md) for supported DSH versions and upgrade checks.

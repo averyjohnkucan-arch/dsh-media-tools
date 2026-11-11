@@ -1,11 +1,12 @@
 {
   "name": "dsh-media-tools",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Portable audio and native temporal video tools, Cordis plugins, agent skills, CLI and MCP server",
   "type": "module",
   "license": "MIT",
   "engines": {
-    "node": ">=22.19.0"
+    "node": ">=22.19.0",
+    "dsh": ">=0.2.1-rc.2 <0.3.0-0"
   },
   "bin": {
     "dsh-media": "src/cli.mjs",
@@ -42,7 +43,8 @@
     "test": "node --test test/*.test.mjs",
     "skills:install": "node src/install.mjs",
     "doctor": "node src/cli.mjs doctor",
-    "models": "node src/model-download.mjs"
+    "models": "node src/model-download.mjs",
+    "check:dsh": "node scripts/check-dsh-compatibility.mjs"
   },
   "dependencies": {
     "@ffprobe-installer/ffprobe": "2.1.2",
@@ -52,7 +54,7 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "~4.0.5",
-    "@deepseek-ai/dsh-tools": "0.2.1-rc.2"
+    "@deepseek-ai/dsh-tools": ">=0.2.1-rc.2 <0.3.0-0"
   },
   "peerDependenciesMeta": {
     "@deepseek-ai/dsh-tools": {
