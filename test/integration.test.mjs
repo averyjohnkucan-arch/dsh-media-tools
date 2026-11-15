@@ -1,3 +1,5 @@
+import {apply as installNativeExecutor} from '@deepseek-ai/dsh-tool-executor-native';
+import {executeOne} from './execute-one.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -20,7 +22,7 @@ const workspace=await fs.mkdtemp(path.join(os.tmpdir(),'dsh-media-integration-')
 test.after(async()=>fs.rm(workspace,{recursive:true,force:true}));
 await run(cfg.ffmpeg,['-v','error','-f','lavfi','-i','sine=frequency=440:duration=1',path.join(workspace,'tone.wav')]);
 function context(){
- const ctx=new Context(); new SystemPrompt(ctx,{}); new ToolRuntime(ctx);
+ const ctx=new Context(); new SystemPrompt(ctx,{}); new ToolRuntime(ctx);installNativeExecutor(ctx);
  ctx.provide('attachments',{
   async saveImage(a){return {attachmentId:'sha256:'+a.name,name:a.name,mediaType:a.mediaType};},
   async saveFile(a){return {attachmentId:'sha256:'+a.name,name:a.name};},
@@ -35,7 +37,7 @@ test('real Cordis plugins register, emit inline images, disable separately and r
   assert.equal(ctx.tools.schemas().length,8);
   const agent={id:'fixture',session:{id:'fixture',header:{cwd:workspace},snapshotEvents:()=>[{type:'user/message',data:{type:'file',attachment:{attachmentId:'sha256:tone',name:'tone.wav'}}}]}};
   agent.ctx=createScope(ctx,agent).ctx;
-  const result=await ctx.tools.execute({name:'analyze_audio',arguments:{duration_seconds:0.5},agent,callId:'plot',signal:new AbortController().signal});
+  const result=await executeOne(ctx, {name:'analyze_audio',arguments:{duration_seconds:0.5},agent,callId:'plot',signal:new AbortController().signal});
   assert(!result.isError,JSON.stringify(result));assert.equal(result.value.images.length,2);
   assert.equal(result.content.filter(x=>x.type==='image').length,2);
   await a.dispose();
@@ -50,7 +52,7 @@ test('plugin disposal cancels its active tool call',async()=>{
  try{
   const fiber=await ctx.plugin(audio,{...cfg,localAIV2Root:undefined,backends:{listen_audio:{command:process.execPath,args:[backend]}}});
   const agent={id:'cancel',session:{id:'cancel',header:{cwd:workspace},snapshotEvents:()=>[]}};agent.ctx=createScope(ctx,agent).ctx;
-  const pending=ctx.tools.execute({name:'listen_audio',arguments:{source_path:'tone.wav'},agent,callId:'cancel',signal:new AbortController().signal});
+  const pending=executeOne(ctx, {name:'listen_audio',arguments:{source_path:'tone.wav'},agent,callId:'cancel',signal:new AbortController().signal});
   await new Promise(resolve=>setTimeout(resolve,200)); await fiber.dispose();
   const r=await pending; assert(r.isError);assert.match(JSON.stringify(r),/disabled|abort|cancel/i);
  }finally{await ctx.fiber.dispose();}

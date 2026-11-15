@@ -1,11 +1,12 @@
 {
   "name": "dsh-media-tools",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Portable audio and native temporal video tools, Cordis plugins, agent skills, CLI and MCP server",
   "type": "module",
   "license": "MIT",
   "engines": {
-    "node": ">=22.19.0"
+    "node": ">=22.19.0",
+    "dsh": ">=0.2.2-rc.1 <0.3.0-0"
   },
   "bin": {
     "dsh-media": "src/cli.mjs",
@@ -31,7 +32,8 @@
     "npm-shrinkwrap.json",
     "THIRD_PARTY_NOTICES.md",
     "requirements-cuda.txt",
-    "native-runtime.json"
+    "native-runtime.json",
+    "COMPATIBILITY.md"
   ],
   "dsh": {
     "bundle": {
@@ -51,8 +53,8 @@
     "zod": "3.25.76"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "~4.0.5",
-    "@deepseek-ai/dsh-tools": "0.2.1-rc.2"
+    "@deepseek-ai/cordis": "~4.1.0",
+    "@deepseek-ai/dsh-tools": ">=0.2.2-rc.1 <0.3.0-0"
   },
   "peerDependenciesMeta": {
     "@deepseek-ai/dsh-tools": {
@@ -63,9 +65,10 @@
     }
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "4.0.5",
-    "@deepseek-ai/dsh-system-prompt": "0.2.1-rc.2",
-    "@deepseek-ai/dsh-tools": "0.2.1-rc.2"
+    "@deepseek-ai/cordis": "~4.1.0",
+    "@deepseek-ai/dsh-system-prompt": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-tools": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-tool-executor-native": "0.2.2-rc.1"
   },
   "repository": {
     "type": "git",
