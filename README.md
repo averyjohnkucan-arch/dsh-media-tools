@@ -1,5 +1,7 @@
 # dsh-media-tools
 
+**RC4 installation trial.** Start DeepSeek Harness with `npx @deepseek-ai/dsh@0.2.2-rc.4 web` (Node.js 24.9 or newer). In **Plugins → Add plugin**, paste the full path to this RC4 trial’s `.tgz` file and enable the plugin.
+
 Two independent DSH/Cordis plugins, agent skills, a CLI and a stdio MCP server, with included on-demand Omni listening and native temporal video backends. The old Local AI v2 application does not need to run.
 
 | Plugin | Selectable tools |
@@ -29,7 +31,7 @@ For CPU tools only, omit `--include-backends` and `--local-ai`; configure `--whi
 
 ## DSH
 
-Target: DSH `0.2.1-rc.2` and Cordis `~4.0.5`. Package and install from your chosen DSH profile:
+Target: DSH `0.2.2-rc.4` and Cordis `~4.1.0`. Package and install from your chosen DSH profile:
 
 ```bash
 npm pack
