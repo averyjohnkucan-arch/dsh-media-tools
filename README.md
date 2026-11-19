@@ -9,6 +9,10 @@ Two independent DSH/Cordis plugins, agent skills, a CLI and a stdio MCP server, 
 
 Audio analysis returns inline waveform/FFT/spectrogram and waterfall plots, measured digital levels, and numerical spectrum data. Editing creates a new WAV. Conversion supports audio extraction plus WAV/FLAC/MP3/M4A/OGG and MP4/WebM/GIF. CPU Whisper supplies timestamped speech. Omni supplies fallible sound descriptions. Native video preserves temporal frames, aligned audio and engine evidence.
 
+## Find existing media models
+
+Open **Settings → Media Tools**, choose the parent folder containing your model assets and select **Scan folder and subfolders**. Review and save detected Whisper and Qwen3 Omni selections. The runtime panel shows which processing features are available. For native temporal video or Omni inference, also provision the standalone backend in the [backend guide](docs/standalone-backends.md).
+
 ## Install in DSH
 
 In **Plugins → Add plugin**, paste `https://github.com/averyjohnkucan-arch/dsh-media-tools`. Verified with DeepSeek Harness `0.2.2-rc.4` and Node.js 24.9 or newer. If DSH asks for build approval, allow `ffmpeg-static` and the `@ffprobe-installer` package for your platform, then continue in the same dialog. The FFmpeg download can take a minute.

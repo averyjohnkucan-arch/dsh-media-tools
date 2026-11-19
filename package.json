@@ -1,6 +1,6 @@
 {
   "name": "dsh-media-tools",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Portable audio and native temporal video tools, Cordis plugins, agent skills, CLI and MCP server",
   "type": "module",
   "license": "MIT",
@@ -15,7 +15,9 @@
   "exports": {
     ".": "./src/index.mjs",
     "./audio": "./src/audio-plugin.mjs",
-    "./video": "./src/video-plugin.mjs"
+    "./video": "./src/video-plugin.mjs",
+    "./settings": "./src/settings-plugin.mjs",
+    "./client": "./src/client.js"
   },
   "files": [
     "src",
@@ -36,6 +38,11 @@
     "COMPATIBILITY.md"
   ],
   "dsh": {
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": ["@deepseek-ai/dsh-client-ui-settings"]
+    },
     "bundle": {
       "patch": "./cordis.patch.yml"
     }

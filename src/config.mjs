@@ -4,10 +4,14 @@ import {constants} from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 export const configPath = () => process.env.DSH_MEDIA_CONFIG || path.join(os.homedir(), '.config', 'dsh-media', 'config.json');
-export async function loadConfig(overrides = {}) {
+export async function readSavedConfig() {
   let saved = {};
   try { saved = JSON.parse(await fs.readFile(configPath(), 'utf8')); }
   catch (e) { if (e.code !== 'ENOENT') throw e; }
+  return saved;
+}
+export async function loadConfig(overrides = {}) {
+  const saved = await readSavedConfig();
   const require = createRequire(import.meta.url);
   let ffmpeg = 'ffmpeg', ffprobe = 'ffprobe';
   try { const candidate = require('ffmpeg-static'); if (typeof candidate === 'string') { await fs.access(candidate, constants.X_OK); ffmpeg = candidate; } } catch {}
