@@ -4,4 +4,4 @@
     - id: dsh-media-video
       name: dsh-media-tools/video
     - id: dsh-media-settings
-      name: dsh-media-tools/settings
+      name: dsh-media-tools
