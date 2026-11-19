@@ -9,7 +9,13 @@ Two independent DSH/Cordis plugins, agent skills, a CLI and a stdio MCP server, 
 
 Audio analysis returns inline waveform/FFT/spectrogram and waterfall plots, measured digital levels, and numerical spectrum data. Editing creates a new WAV. Conversion supports audio extraction plus WAV/FLAC/MP3/M4A/OGG and MP4/WebM/GIF. CPU Whisper supplies timestamped speech. Omni supplies fallible sound descriptions. Native video preserves temporal frames, aligned audio and engine evidence.
 
-## Install
+## Install in DSH
+
+In **Plugins → Add plugin**, paste `https://github.com/averyjohnkucan-arch/dsh-media-tools`. Verified with DeepSeek Harness `0.2.2-rc.4` and Node.js 24.9 or newer. If DSH asks for build approval, allow `ffmpeg-static` and the `@ffprobe-installer` package for your platform, then continue in the same dialog. The FFmpeg download can take a minute.
+
+The bundle adds separate **Media Audio** and **Media Video** components. Set up the Python and model backends below for tools that require them.
+
+## Standalone runtime and skill setup
 
 ```bash
 git clone https://github.com/averyjohnkucan-arch/dsh-media-tools.git
@@ -28,13 +34,6 @@ For a fresh machine with separately selected models, replace `--local-ai` with `
 For CPU tools only, omit `--include-backends` and `--local-ai`; configure `--whisper-model /path/to/faster-whisper-model` for speech. Existing unowned or locally edited skills are preserved; upgrades stop before replacing them. Previous runtime releases remain for rollback. `node src/install.mjs --uninstall` removes only owned, unchanged skills and preserves models, config and workspace outputs.
 
 ## DSH
-
-Target: DSH `0.2.1-rc.2` and Cordis `~4.0.5`. Package and install from your chosen DSH profile:
-
-```bash
-npm pack
-dsh plugin --profile web add /absolute/path/dsh-media-tools-0.2.2.tgz
-```
 
 The package inserts `dsh-media-audio` and `dsh-media-video` as independently switchable plugins. They use DSH tool registration, attachments, prompt sections and Cordis lifecycle cleanup; no host source patch is needed. Disabling either cancels its owned work and removes its registrations. It never deletes generated files or models. Individual inserts are also in `audio.patch.yml` and `video.patch.yml`.
 
