@@ -84,6 +84,11 @@ window.__ModuleLoader__.load({id:'dsh-media-tools',factory(require) {
           return h('li',{key},label + ' · ' + state);
         })),
         h('button',{disabled:busy,onClick:()=>work(async()=>setStatus(await request('status')))},'Check runtime'),
+        status?.platform === 'linux' && status.models?.omni && status.whisperModel && status.checks.dsp.ok && !status.checks.listen_backend.configured &&
+          h('button',{disabled:busy,onClick:()=>work(async()=>{
+            await request('setupOmni');setNotice('Omni audio runtime installed.');
+            setStatus(await request('status'));
+          })},'Install Omni audio runtime'),
         status && !status.checks.dsp?.ok && h('button',{disabled:busy,onClick:()=>work(async()=>{
           await request('setupDecoder');setNotice('Audio analysis and transcription dependencies installed.');
           setStatus(await request('status'));

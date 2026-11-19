@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {randomUUID} from 'node:crypto';
 import {configPath, loadConfig, readSavedConfig} from './config.mjs';
 import {matchFile, modelFiles} from './model-files.mjs';
+import {installNativeRuntime} from './runtime-assets.mjs';
 import {doctor} from './core.mjs';
 import {run} from './process.mjs';
 
@@ -90,9 +91,10 @@ export function createSetupActions(signal) {
         const launcher = process.env.DSH_MEDIA_PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
         const python = path.join(venv, process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
         try {
-          await run(launcher, ['-m','venv',venv], {signal,timeout:120000});
-          await run(python, ['-m','pip','install','--disable-pip-version-check','-r',fileURLToPath(new URL('../requirements.txt', import.meta.url))], {signal,timeout:600000});
-          await run(python, ['-c','import numpy, scipy, matplotlib, soundfile, faster_whisper'], {signal,timeout:30000});
+          await run(launcher, [
+            fileURLToPath(new URL('../python/setup_decoder.py', import.meta.url)), directory, venv,
+            fileURLToPath(new URL('../requirements.txt', import.meta.url)),
+          ], {signal,timeout:900000});
           const current = await readSavedConfig();
           // A configured native backend can require additional CUDA libraries in its own venv.
           if (!current.backend) await saveSettings({python});
@@ -101,6 +103,30 @@ export function createSetupActions(signal) {
           await fs.rm(venv, {recursive:true, force:true});
           throw error;
         }
+        return {installed:true};
+      }
+      if (action === 'setupOmni') {
+        const cfg = await readSavedConfig();
+        if (cfg.backend) throw Error('An Omni or native video backend is already configured.');
+        if (!cfg.models?.omni?.omni_model || !cfg.models.omni.omni_projector || !cfg.whisperModel || !cfg.python) {
+          throw Error('Save the Omni and Whisper models and install the audio analysis runtime first.');
+        }
+        for (const file of [cfg.models.omni.omni_model, cfg.models.omni.omni_projector, path.join(cfg.whisperModel,'model.bin')]) {
+          await fs.access(file);
+        }
+        const directory = path.join(path.dirname(configPath()),'runtime');
+        const runtime = path.join(directory,'native-cuda13');
+        const llama_server = path.join(runtime,'omni','llama-server');
+        try { await fs.access(path.join(runtime,'runtime-receipt.json'));await fs.access(llama_server); }
+        catch { await installNativeRuntime(runtime); }
+        signal.throwIfAborted();
+        await run(cfg.python, ['-m','ensurepip'], {signal,timeout:120000});
+        await run(cfg.python, ['-m','pip','install','--disable-pip-version-check','-r',fileURLToPath(new URL('../requirements-cuda.txt',import.meta.url))], {signal,timeout:600000});
+        await saveSettings({backend:{
+          schema:1, cacheDirectory:runtime, libraryDirs:[path.join(runtime,'omni')],
+          llama_server, ...cfg.models.omni, whisper_model:cfg.whisperModel, gpu:0,
+          cpu_threads:8, cpu_moe_layers:18, max_tokens:8192, context:9216, temperature:0.6,
+        }});
         return {installed:true};
       }
       throw Error('Unknown media settings action.');

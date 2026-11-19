@@ -68,6 +68,9 @@ export async function execute(operation, args, {workspace, sessionId = 'cli', si
     } else {
       if (operation === 'analyze_video' && (typeof args.question !== 'string' || !args.question.trim() || args.question.length > 12000)) throw Error('Provide a video question of at most 12000 characters');
       const request = {schema: 1, operation, source, workspace, output, sessionId, question: args.question};
+      if (operation === 'analyze_video' && config.backend && !config.backend.native) {
+        throw Error('Configure a native temporal video profile and pack before analyzing video.');
+      }
       result = config.backend ? await bundledBackend(request, config, signal) : config.localAIV2Root ? await localV2(request, config, signal) : await commandBackend(request, config, signal);
     }
     signal?.throwIfAborted();
@@ -91,7 +94,7 @@ export async function doctor(overrides) {
   } else checks.whisper = {ok:false,error:'Set whisperModel to a local faster-whisper model directory, or configure a transcription backend'};
   let local;
   if(config.backend){
-    try { for(const key of ['llama_server','omni_model','omni_projector','whisper_model'])await fs.access(config.backend[key]); await fs.access(config.backend.native.engine); await fs.access(config.backend.native.encoder); local={configured:true,ok:true,mode:'bundled-on-demand',requiresV2Service:false,requires_live_qualification:true}; }
+    try { for(const key of ['llama_server','omni_model','omni_projector','whisper_model'])await fs.access(config.backend[key]); local={configured:true,ok:true,mode:'bundled-on-demand',requiresV2Service:false,requires_live_qualification:true}; }
     catch(e){local={configured:true,ok:false,mode:'bundled-on-demand',error:e.message};}
   }
   if (!config.backend && config.localAIV2Root) {
@@ -102,6 +105,15 @@ export async function doctor(overrides) {
     } catch { local = {configured:true,ok:false,requires_live_qualification:true,error:'Configured Local AI v2 companion is not reachable; start it or configure a command backend.'}; }
   }
   checks.listen_backend = local || {configured:!!config.backends?.listen_audio,ok:!!config.backends?.listen_audio,requires_live_qualification:true};
-  checks.native_video_backend = local || {configured:!!config.backends?.analyze_video,ok:!!config.backends?.analyze_video,requires_live_qualification:true};
+  if (config.backend && local?.ok) {
+    try {
+      if (!config.backend.native) throw Error('A compatible native temporal video profile and pack are needed.');
+      await fs.access(config.backend.native.engine);
+      await fs.access(config.backend.native.encoder);
+      checks.native_video_backend = local;
+    } catch (error) { checks.native_video_backend = {configured:Boolean(config.backend.native),ok:false,error:error.message}; }
+  } else {
+    checks.native_video_backend = local || {configured:!!config.backends?.analyze_video,ok:!!config.backends?.analyze_video,requires_live_qualification:true};
+  }
   return {checks, platform:process.platform, dsh_peer:'0.2.1-rc.2', windows_qualified:false};
 }
