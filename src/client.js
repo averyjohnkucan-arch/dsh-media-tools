@@ -33,8 +33,17 @@ window.__ModuleLoader__.load({id:'dsh-media-tools',factory(require) {
     const [browse,setBrowse] = useState(null), [scan,setScan] = useState(null);
     const [whisper,setWhisper] = useState(''), [error,setError] = useState('');
     const [notice,setNotice] = useState(''), [busy,setBusy] = useState(false);
+    const [catalog,setCatalog] = useState(null), [showDownloads,setShowDownloads] = useState(false);
     const omni = Boolean(scan?.paths.omni_model && scan?.paths.omni_projector);
     useEffect(() => { request('status').then(setStatus,e => setError(e.message)); },[]);
+    useEffect(() => {
+      if (!showDownloads) return;
+      let mounted = true;
+      const refresh = () => request('recommended').then(value => mounted && setCatalog(value)).catch(error => mounted && setError(error.message));
+      void refresh();
+      const timer = setInterval(refresh,1500);
+      return () => { mounted = false;clearInterval(timer); };
+    },[showDownloads]);
     async function work(operation) {
       setBusy(true);setError('');setNotice('');
       try { await operation(); } catch (error) { setError(error.message); }
@@ -73,6 +82,24 @@ window.__ModuleLoader__.load({id:'dsh-media-tools',factory(require) {
           await request('saveModels',{folder,useOmni:omni,whisper});setNotice('Model selections saved.');
           setStatus(await request('status'));
         })},'Save detected models')),
+      h('details',{onToggle:event=>setShowDownloads(event.currentTarget.open)},
+        h('summary',null,'Download models from Hugging Face'),
+        showDownloads && !catalog && h('p',null,'Loading pinned models…'),
+        ...((catalog?.models || []).filter(model=>model.files.every(file=>file.downloadable)).map(model=>{
+          const job = catalog.jobs.findLast(job=>job.modelId===model.id);
+          const total = model.files.reduce((sum,file)=>sum+file.size,0);
+          const downloading = catalog.jobs.some(job=>job.status==='running');
+          return h('div',{key:model.id,style:{paddingBlock:8}},
+            h('strong',null,model.name+' · '+(total/1024**3).toFixed(2)+' GiB'),
+            job&&h('p',{role:'status'},job.progress+' · '+Math.round(100*job.received/job.total)+'%'),
+            h('button',{disabled:busy||downloading,onClick:()=>work(async()=>{
+              await request('recommendedDownload',{id:model.id});setCatalog(await request('recommended'));
+            })},'Download '+model.name),
+            job?.status==='running'&&h('button',{disabled:busy,onClick:()=>work(async()=>setCatalog(await request('recommendedCancel',{id:job.id})))},'Cancel'),
+            job?.status==='complete'&&h('button',{disabled:busy,onClick:()=>work(async()=>{
+              await request('useDownload',{id:job.id});setNotice('Model selection saved.');setStatus(await request('status'));
+            })},'Use downloaded model'));
+        }))),
       h('div',null,
         h('h3',null,'Runtime status'),
         status?.models?.omni && h('p',null,'Omni Captioner model and projector saved.'),

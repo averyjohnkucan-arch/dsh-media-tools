@@ -6,6 +6,7 @@ import {configPath, loadConfig, readSavedConfig} from './config.mjs';
 import {matchFile, modelFiles} from './model-files.mjs';
 import {installNativeRuntime} from './runtime-assets.mjs';
 import {doctor} from './core.mjs';
+import {RecommendedModels} from './recommended-models.mjs';
 import {run} from './process.mjs';
 
 const omniFiles = {
@@ -57,7 +58,11 @@ async function saveSettings(change) {
 
 export function createSetupActions(signal) {
   let busy = false;
-  return async (action, payload = {}) => {
+  const downloads = new RecommendedModels(new URL('./recommended-models.json',import.meta.url),path.join(path.dirname(configPath()),'recommended-models'));
+  const handle = async (action, payload = {}) => {
+    if (['recommended','recommendedDownload','recommendedCancel'].includes(action)) {
+      return downloads.action(action,payload);
+    }
     if (action === 'status') {
       const cfg = await loadConfig();
       return {models:cfg.models || {}, whisperModel:cfg.whisperModel || '', ...await doctor()};
@@ -66,6 +71,19 @@ export function createSetupActions(signal) {
     if (busy) throw Error('Media settings are already being updated.');
     busy = true;
     try {
+      if (action === 'useDownload') {
+        const job = downloads.jobs.get(payload.id);
+        if (!job || job.status !== 'complete') throw Error('Finish verifying the model download first.');
+        const selected = await scanModels(job.directory);
+        const cfg = await readSavedConfig();
+        if (job.modelId === 'whisper-small' && selected.whisper.length === 1) {
+          const whisperModel = selected.whisper[0];
+          await saveSettings({whisperModel,...cfg.backend && {backend:{...cfg.backend,whisper_model:whisperModel}}});
+        } else if (job.modelId === 'omni-captioner' && !selected.issues.length) {
+          await saveSettings({models:{...cfg.models,omni:selected.paths},...cfg.backend && {backend:{...cfg.backend,...selected.paths}}});
+        } else throw Error('The verified model set was not found in the download directory.');
+        return {saved:true};
+      }
       if (action === 'saveModels') {
         const {paths, whisper} = await scanModels(payload.folder);
         const change = {};
@@ -132,4 +150,6 @@ export function createSetupActions(signal) {
       throw Error('Unknown media settings action.');
     } finally { busy = false; }
   };
+  handle.dispose = () => downloads.dispose();
+  return handle;
 }

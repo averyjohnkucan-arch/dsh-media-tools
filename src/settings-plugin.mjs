@@ -10,7 +10,10 @@ export function apply(ctx) {
   const path = '/plugins/dsh-media-tools/settings';
   const connection = {path, token:randomBytes(32).toString('hex')};
   const actionHandler = createSetupActions(abort.signal);
-  ctx.effect(() => () => abort.abort(Error('Media settings plugin disabled.')));
+  ctx.effect(() => async () => {
+    abort.abort(Error('Media settings plugin disabled.'));
+    await actionHandler.dispose();
+  });
   ctx.on('webserver/index-inject', items => items.push({kind:'global', name:'__DSH_MEDIA_TOOLS__', value:connection}));
   ctx.inject(['connection'], scope => scope.effect(() => ctx.webServer.register({
     kind:'exact', path:path + '/connection',

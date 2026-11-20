@@ -11,7 +11,7 @@ Audio analysis returns inline waveform/FFT/spectrogram and waterfall plots, meas
 
 ## Find existing media models
 
-Open **Settings → Media Tools**, choose the parent folder containing your model assets and select **Scan folder and subfolders**. Review and save detected Whisper and Qwen3 Omni selections. The runtime panel shows which processing features are available. For native temporal video or Omni inference, also provision the standalone backend in the [backend guide](docs/standalone-backends.md).
+Open **Settings → Media Tools**, choose the parent folder containing your model assets and select **Scan folder and subfolders**. Review and save detected Whisper and Qwen3 Omni selections. **Download models from Hugging Face** offers both pinned sets and lets you use them after verification. The runtime panel shows which processing features are available. For native temporal video or Omni inference, also provision the standalone backend in the [backend guide](docs/standalone-backends.md).
 
 ## Install in DSH
 
